@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FS Custom Flooring — Appointment & QR Platform
+
+Appointment booking system for a flooring/remodeling business. Customers scan a QR code, land on the site, and book an appointment. Admin manages everything from a dashboard.
+
+## Tech Stack
+
+- **Next.js 15** (App Router, Server Actions)
+- **Supabase** (Postgres, Auth, RLS)
+- **TypeScript** (strict mode)
+- **Tailwind CSS + shadcn/ui**
+- **React Email + Resend** (transactional emails)
+- **Zod** (validation)
+
+## What's Built
+
+### Customer-Facing
+- Landing page with business info and booking CTA
+- Multi-step booking wizard (project type, property type, date/time, contact info)
+- Confirmation page with add-to-calendar support
+- QR code redirect routes (`/r/[slug]`)
+
+### Admin Dashboard (`/admin`)
+- Appointment calendar with month view, day detail panel, and appointment pills
+- Quick Book — create a confirmed appointment in seconds for walk-in customers
+- Appointment detail dialog with status management and admin notes
+- Availability manager (time slot configuration by day of week)
+- QR code manager (create, edit, track scans)
+- Email system (confirmation, reminders, follow-ups) with settings panel
+- Dashboard stats and analytics
+
+### Infrastructure
+- Supabase auth with middleware-protected admin routes
+- Server actions for all mutations
+- Email templates with React Email
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env.local
+# Fill in Supabase URL, anon key, service role key, Resend API key
+
+# Run dev server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Description |
+|----------|-------------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon/public key |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key (server-side only) |
+| `RESEND_API_KEY` | Resend API key for emails |
 
-## Learn More
+## Content TODO
 
-To learn more about Next.js, take a look at the following resources:
+> The app structure and features are solid. The next priority is **real content and imagery** across the entire site:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Replace placeholder text on landing page with actual business copy
+- Add real project photos (kitchen, bathroom, flooring portfolio)
+- Add business logo, favicon, and Open Graph images
+- Write proper meta descriptions for SEO
+- Add testimonials / customer reviews section
+- Before/after photo galleries for each project type
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Deploy
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Deploy on [Vercel](https://vercel.com):
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npx vercel
+```
+
+See [Next.js deployment docs](https://nextjs.org/docs/app/building-your-application/deploying) for details.
