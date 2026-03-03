@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback } from "react";
 import { format } from "date-fns";
-import { Phone, CalendarX2, Plus, Check, Mail, Loader2 } from "lucide-react";
+import { Phone, CalendarX2, Plus, Mail, Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -182,12 +182,12 @@ export function DayAppointments({
     [onAppointmentUpdate]
   );
 
-  const handleConfirm = useCallback(
-    async (appt: Appointment) => {
-      setActionLoading(`confirm-${appt.id}`);
-      const result = await updateAppointment({ id: appt.id, status: "confirmed" });
+  const handleStatusChange = useCallback(
+    async (appt: Appointment, newStatus: AppointmentStatus) => {
+      setActionLoading(`status-${appt.id}`);
+      const result = await updateAppointment({ id: appt.id, status: newStatus });
       if (result.success) {
-        onAppointmentUpdate({ ...appt, status: "confirmed" });
+        onAppointmentUpdate({ ...appt, status: newStatus });
       }
       setActionLoading(null);
     },
@@ -306,44 +306,54 @@ export function DayAppointments({
               </button>
 
               {/* Quick actions bar */}
-              <div className="flex items-center gap-1 border-t px-3 py-1.5">
-                {appt.status === "pending" && (
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className="h-7 gap-1 text-xs text-green-700 hover:text-green-800 hover:bg-green-50"
-                    disabled={actionLoading === `confirm-${appt.id}`}
-                    onClick={() => handleConfirm(appt)}
-                  >
-                    {actionLoading === `confirm-${appt.id}` ? (
+              <div className="flex items-center gap-1.5 border-t px-3 py-1.5">
+                {/* Status selector */}
+                <Select
+                  value={appt.status}
+                  onValueChange={(val) =>
+                    handleStatusChange(appt, val as AppointmentStatus)
+                  }
+                  disabled={actionLoading === `status-${appt.id}`}
+                >
+                  <SelectTrigger className="h-7 w-auto gap-1 border-none bg-transparent px-2 text-xs shadow-none hover:bg-accent">
+                    {actionLoading === `status-${appt.id}` ? (
                       <Loader2 className="size-3 animate-spin" />
                     ) : (
-                      <Check className="size-3" />
+                      <div
+                        className={cn(
+                          "size-2 rounded-full",
+                          STATUS_DOT_COLORS[appt.status]
+                        )}
+                      />
                     )}
-                    Confirm
-                  </Button>
-                )}
-                {appt.customer_email && (
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className="h-7 gap-1 text-xs text-blue-700 hover:text-blue-800 hover:bg-blue-50"
-                    disabled={actionLoading === `email-${appt.id}`}
-                    onClick={() => handleEmail(appt)}
-                  >
-                    {actionLoading === `email-${appt.id}` ? (
-                      <Loader2 className="size-3 animate-spin" />
-                    ) : (
-                      <Mail className="size-3" />
-                    )}
-                    Email
-                  </Button>
-                )}
-                {appt.status !== "pending" && !appt.customer_email && (
-                  <span className="text-[10px] text-muted-foreground/60 py-0.5">
-                    No quick actions
-                  </span>
-                )}
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pending">Pending</SelectItem>
+                    <SelectItem value="confirmed">Confirmed</SelectItem>
+                    <SelectItem value="completed">Completed</SelectItem>
+                    <SelectItem value="cancelled">Cancelled</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <div className="ml-auto flex items-center gap-1">
+                  {appt.customer_email && (
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-7 gap-1 text-xs text-blue-700 hover:text-blue-800 hover:bg-blue-50"
+                      disabled={actionLoading === `email-${appt.id}`}
+                      onClick={() => handleEmail(appt)}
+                    >
+                      {actionLoading === `email-${appt.id}` ? (
+                        <Loader2 className="size-3 animate-spin" />
+                      ) : (
+                        <Mail className="size-3" />
+                      )}
+                      Email
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
           ))}
