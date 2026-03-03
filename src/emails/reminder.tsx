@@ -12,14 +12,11 @@ import {
   Column,
 } from "@react-email/components";
 
-interface AppointmentConfirmationProps {
+interface ReminderEmailProps {
   customerName: string;
-  customerPhone: string;
   projectType: string;
-  propertyType: string;
   appointmentDate: string;
   appointmentTime: string;
-  description?: string;
 }
 
 function capitalize(value: string): string {
@@ -41,16 +38,13 @@ function formatDate(dateString: string): string {
   }
 }
 
-export function AppointmentConfirmation({
+export function ReminderEmail({
   customerName,
-  customerPhone,
   projectType,
-  propertyType,
   appointmentDate,
   appointmentTime,
-  description,
-}: AppointmentConfirmationProps) {
-  const previewText = `Your ${capitalize(projectType)} walkthrough is confirmed for ${formatDate(appointmentDate)}`;
+}: ReminderEmailProps) {
+  const previewText = `Reminder: Your ${capitalize(projectType)} walkthrough is on ${formatDate(appointmentDate)}`;
 
   return (
     <Html>
@@ -72,25 +66,16 @@ export function AppointmentConfirmation({
           <Section style={styles.content}>
             <Text style={styles.greeting}>Hi {customerName},</Text>
             <Text style={styles.paragraph}>
-              Thank you for scheduling your walkthrough! Here are your appointment details:
+              This is a friendly reminder about your upcoming{" "}
+              <span style={styles.bold}>{capitalize(projectType)}</span> walkthrough.
             </Text>
           </Section>
 
           {/* Appointment Details Box */}
           <Section style={styles.detailsBox}>
             <Heading as="h2" style={styles.detailsHeading}>
-              Appointment Details
+              Your Appointment
             </Heading>
-
-            <Row style={styles.detailRow}>
-              <Column style={styles.detailLabel}>Project Type:</Column>
-              <Column style={styles.detailValue}>{capitalize(projectType)}</Column>
-            </Row>
-
-            <Row style={styles.detailRow}>
-              <Column style={styles.detailLabel}>Property Type:</Column>
-              <Column style={styles.detailValue}>{capitalize(propertyType)}</Column>
-            </Row>
 
             <Row style={styles.detailRow}>
               <Column style={styles.detailLabel}>Date:</Column>
@@ -101,46 +86,21 @@ export function AppointmentConfirmation({
               <Column style={styles.detailLabel}>Time:</Column>
               <Column style={styles.detailValue}>{appointmentTime}</Column>
             </Row>
+
+            <Row style={styles.detailRow}>
+              <Column style={styles.detailLabel}>Service:</Column>
+              <Column style={styles.detailValue}>
+                {capitalize(projectType)} Flooring Walkthrough
+              </Column>
+            </Row>
           </Section>
 
-          {/* Project Notes */}
-          {description && description.trim() !== "" && (
-            <Section style={styles.content}>
-              <Text style={styles.notesLabel}>Project Notes:</Text>
-              <Text style={styles.notesValue}>{description}</Text>
-            </Section>
-          )}
-
-          <Hr style={styles.divider} />
-
-          {/* What Happens Next */}
+          {/* Reschedule Notice */}
           <Section style={styles.content}>
-            <Heading as="h2" style={styles.sectionHeading}>
-              What happens next?
-            </Heading>
-
-            <Row style={styles.stepRow}>
-              <Column style={styles.stepNumber}>1</Column>
-              <Column style={styles.stepText}>
-                We&apos;ll call you at{" "}
-                <span style={styles.bold}>{customerPhone}</span> to confirm and
-                get your address
-              </Column>
-            </Row>
-
-            <Row style={styles.stepRow}>
-              <Column style={styles.stepNumber}>2</Column>
-              <Column style={styles.stepText}>
-                Our team will visit at the scheduled time for a free walkthrough
-              </Column>
-            </Row>
-
-            <Row style={styles.stepRow}>
-              <Column style={styles.stepNumber}>3</Column>
-              <Column style={styles.stepText}>
-                You&apos;ll receive a detailed estimate within 48 hours
-              </Column>
-            </Row>
+            <Text style={styles.rescheduleText}>
+              If you need to reschedule, please call us at{" "}
+              <span style={styles.bold}>(515) 414-4145</span>
+            </Text>
           </Section>
 
           <Hr style={styles.divider} />
@@ -214,6 +174,10 @@ const styles = {
     color: "#4a4a4a",
     margin: "8px 0 20px",
   },
+  bold: {
+    fontWeight: "700" as const,
+    color: "#1a1a1a",
+  },
   detailsBox: {
     backgroundColor: "#f8f9fa",
     border: "1px solid #e9ecef",
@@ -247,61 +211,20 @@ const styles = {
     verticalAlign: "top" as const,
     paddingBottom: "4px",
   },
-  notesLabel: {
-    fontSize: "14px",
-    fontWeight: "600" as const,
-    color: "#1a1a1a",
-    marginBottom: "4px",
-  },
-  notesValue: {
-    fontSize: "14px",
-    lineHeight: "22px",
+  rescheduleText: {
+    fontSize: "15px",
+    lineHeight: "24px",
     color: "#4a4a4a",
-    backgroundColor: "#f8f9fa",
-    border: "1px solid #e9ecef",
+    margin: "0 0 24px",
+    backgroundColor: "#fffbeb",
+    border: "1px solid #fde68a",
     borderRadius: "6px",
     padding: "12px 16px",
-    marginTop: "4px",
-    marginBottom: "24px",
   },
   divider: {
     borderColor: "#e9ecef",
     borderWidth: "1px",
     margin: "0 40px",
-  },
-  sectionHeading: {
-    fontSize: "18px",
-    fontWeight: "700" as const,
-    color: "#1a1a1a",
-    marginTop: "24px",
-    marginBottom: "16px",
-  },
-  stepRow: {
-    marginBottom: "14px",
-  },
-  stepNumber: {
-    width: "28px",
-    height: "28px",
-    backgroundColor: "#1a1a1a",
-    color: "#ffffff",
-    borderRadius: "50%",
-    fontSize: "13px",
-    fontWeight: "700" as const,
-    textAlign: "center" as const,
-    lineHeight: "28px",
-    verticalAlign: "top" as const,
-  },
-  stepText: {
-    fontSize: "14px",
-    lineHeight: "22px",
-    color: "#4a4a4a",
-    paddingLeft: "12px",
-    verticalAlign: "top" as const,
-    paddingTop: "3px",
-  },
-  bold: {
-    fontWeight: "700" as const,
-    color: "#1a1a1a",
   },
   footer: {
     padding: "24px 40px 32px",
@@ -327,4 +250,4 @@ const styles = {
   },
 } as const;
 
-export default AppointmentConfirmation;
+export default ReminderEmail;

@@ -60,13 +60,13 @@ const PROJECT_OPTIONS: {
     value: "bathroom",
     label: "Bathroom",
     icon: Bath,
-    description: "Vanities, tile, showers & tubs",
+    description: "Tile, showers, vanities & tub surrounds",
   },
   {
     value: "flooring",
     label: "Flooring",
     icon: Layers,
-    description: "Hardwood, tile, luxury vinyl & carpet",
+    description: "Hardwood, tile, LVP & custom flooring",
   },
 ];
 
@@ -227,7 +227,7 @@ export function BookingWizard() {
             <StepContainer isActive={currentStep === 1}>
               <StepHeader
                 title="What type of project?"
-                subtitle="Select the area you'd like to remodel"
+                subtitle="Select the area you'd like to update"
               />
               <div className="grid gap-4 sm:grid-cols-3">
                 {PROJECT_OPTIONS.map((option) => {
@@ -430,7 +430,7 @@ export function BookingWizard() {
                       <FormControl>
                         <Input
                           type="tel"
-                          placeholder="(555) 123-4567"
+                          placeholder="(515) 555-0123"
                           autoComplete="tel"
                           {...field}
                         />

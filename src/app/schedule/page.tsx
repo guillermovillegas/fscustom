@@ -1,12 +1,13 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BookingWizard } from "@/components/booking-wizard";
 
 export const metadata = {
-  title: "Schedule Your Walkthrough | QR Appt",
+  title: "Schedule Your Walkthrough | FS Custom Flooring",
   description:
-    "Book a free in-home walkthrough for your remodeling project.",
+    "Book a free in-home walkthrough for your next project with FS Custom Flooring in Des Moines, IA.",
 };
 
 export default function SchedulePage() {
@@ -21,11 +22,20 @@ export default function SchedulePage() {
               Back to Home
             </Link>
           </Button>
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
-            Schedule Your Walkthrough
-          </h1>
+          <div className="flex items-center gap-3">
+            <Image
+              src="/logo.jpg"
+              alt="FS Custom Flooring"
+              width={32}
+              height={32}
+              className="rounded-sm"
+            />
+            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+              Schedule Your Walkthrough
+            </h1>
+          </div>
           <p className="mt-2 text-muted-foreground">
-            Book a free in-home consultation to discuss your remodeling project.
+            Book a free in-home consultation to discuss your project.
           </p>
         </header>
 

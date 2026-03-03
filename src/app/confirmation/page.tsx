@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { AddToCalendar } from "@/components/add-to-calendar";
 
 function escapeHtml(unsafe: string | null | undefined): string {
   if (!unsafe) return "";
@@ -37,7 +38,7 @@ interface ConfirmationPageProps {
 }
 
 export const metadata = {
-  title: "Booking Confirmed | QR Appt",
+  title: "Booking Confirmed | FS Custom Flooring",
   description: "Your walkthrough appointment has been confirmed.",
 };
 
@@ -95,6 +96,23 @@ export default async function ConfirmationPage({
             </div>
           )}
 
+          {dateStr && time && (
+            <>
+              <Separator />
+              <div className="space-y-2">
+                <p className="text-xs font-medium text-muted-foreground">
+                  Add to your calendar
+                </p>
+                <AddToCalendar
+                  title={`${projectLabel} Walkthrough — FS Custom Flooring`}
+                  date={dateStr}
+                  time={time}
+                  description={`${projectLabel} flooring walkthrough with FS Custom Flooring. We'll call to confirm details and get your address.`}
+                />
+              </div>
+            </>
+          )}
+
           <Separator />
 
           <div className="space-y-3 text-sm text-muted-foreground">
@@ -106,10 +124,10 @@ export default async function ConfirmationPage({
               <span>
                 Questions? Call us at{" "}
                 <a
-                  href="tel:+15551234567"
+                  href="tel:+15154144145"
                   className="font-medium text-foreground underline-offset-4 hover:underline"
                 >
-                  (555) 123-4567
+                  (515) 414-4145
                 </a>
               </span>
             </div>

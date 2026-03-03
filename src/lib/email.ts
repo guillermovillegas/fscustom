@@ -34,7 +34,7 @@ export async function sendConfirmationEmail(
   const { to, ...templateProps } = params;
 
   const { data, error } = await resend.emails.send({
-    from: "Premier Remodeling <onboarding@resend.dev>",
+    from: "FS Custom Flooring <onboarding@resend.dev>",
     to,
     subject: `Appointment Confirmed - ${templateProps.projectType.charAt(0).toUpperCase() + templateProps.projectType.slice(1)} Walkthrough`,
     react: AppointmentConfirmation(templateProps),

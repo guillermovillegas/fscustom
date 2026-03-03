@@ -1,25 +1,20 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Premier Remodeling | Kitchen, Bathroom & Flooring Experts",
+  title: "FS Custom Flooring | Design + Build | Des Moines, IA",
   description:
-    "Transform your space with Premier Remodeling. Expert kitchen, bathroom, and flooring remodeling services. Schedule your free walkthrough today.",
+    "FS Custom Flooring — Design + Build. Kitchen remodel, bathroom remodel, backsplash, tile, hardwood, showers & LVP. Schedule your free walkthrough in Des Moines, IA.",
   openGraph: {
-    title: "Premier Remodeling",
+    title: "FS Custom Flooring",
     description:
-      "Expert kitchen, bathroom, and flooring remodeling services. Schedule your free walkthrough today.",
+      "Design + Build. Kitchen & bathroom remodeling, custom tile, hardwood, showers & LVP in Des Moines, IA.",
     type: "website",
   },
 };
@@ -28,7 +23,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: "#ffffff",
+  themeColor: "#000000",
 };
 
 export default function RootLayout({
@@ -39,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
+        className={`${inter.variable} font-sans antialiased`}
       >
         {children}
       </body>

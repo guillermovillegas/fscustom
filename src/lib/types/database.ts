@@ -18,6 +18,11 @@ export interface Appointment {
   description: string | null;
   status: AppointmentStatus;
   created_at: string;
+  admin_notes: string | null;
+  follow_up_date: string | null;
+  follow_up_sent: boolean;
+  customer_address: string | null;
+  updated_at: string;
 }
 
 export interface PortfolioPhoto {
@@ -37,6 +42,51 @@ export interface TimeSlot {
   is_active: boolean;
 }
 
+export type EmailType = "confirmation" | "follow_up" | "reminder";
+export type EmailStatus = "sent" | "failed" | "skipped";
+
+export interface EmailLog {
+  id: string;
+  appointment_id: string;
+  email_type: EmailType;
+  subject: string;
+  recipient_email: string;
+  status: EmailStatus;
+  sent_at: string;
+  created_at: string;
+}
+
+export interface QrCode {
+  id: string;
+  slug: string;
+  label: string;
+  target_url: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface QrScan {
+  id: string;
+  qr_code_id: string;
+  scanned_at: string;
+  user_agent: string | null;
+  referrer: string | null;
+  ip_address: string | null;
+}
+
+export interface EmailSettings {
+  id: string;
+  confirmation_enabled: boolean;
+  reminder_enabled: boolean;
+  reminder_hours_before: number;
+  follow_up_enabled: boolean;
+  follow_up_days_after: number;
+  follow_up_default_message: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Database {
   public: {
     Tables: {
@@ -54,6 +104,11 @@ export interface Database {
           description?: string | null;
           status?: AppointmentStatus;
           created_at?: string;
+          admin_notes?: string | null;
+          follow_up_date?: string | null;
+          follow_up_sent?: boolean;
+          customer_address?: string | null;
+          updated_at?: string;
         };
         Update: {
           id?: string;
@@ -67,6 +122,11 @@ export interface Database {
           description?: string | null;
           status?: AppointmentStatus;
           created_at?: string;
+          admin_notes?: string | null;
+          follow_up_date?: string | null;
+          follow_up_sent?: boolean;
+          customer_address?: string | null;
+          updated_at?: string;
         };
         Relationships: [];
       };
@@ -105,6 +165,98 @@ export interface Database {
           start_time?: string;
           end_time?: string;
           is_active?: boolean;
+        };
+        Relationships: [];
+      };
+      email_log: {
+        Row: EmailLog;
+        Insert: {
+          id?: string;
+          appointment_id: string;
+          email_type: EmailType;
+          subject: string;
+          recipient_email: string;
+          status: EmailStatus;
+          sent_at?: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          appointment_id?: string;
+          email_type?: EmailType;
+          subject?: string;
+          recipient_email?: string;
+          status?: EmailStatus;
+          sent_at?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      qr_codes: {
+        Row: QrCode;
+        Insert: {
+          id?: string;
+          slug: string;
+          label: string;
+          target_url: string;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          slug?: string;
+          label?: string;
+          target_url?: string;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      email_settings: {
+        Row: EmailSettings;
+        Insert: {
+          id?: string;
+          confirmation_enabled?: boolean;
+          reminder_enabled?: boolean;
+          reminder_hours_before?: number;
+          follow_up_enabled?: boolean;
+          follow_up_days_after?: number;
+          follow_up_default_message?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          confirmation_enabled?: boolean;
+          reminder_enabled?: boolean;
+          reminder_hours_before?: number;
+          follow_up_enabled?: boolean;
+          follow_up_days_after?: number;
+          follow_up_default_message?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      qr_scans: {
+        Row: QrScan;
+        Insert: {
+          id?: string;
+          qr_code_id: string;
+          scanned_at?: string;
+          user_agent?: string | null;
+          referrer?: string | null;
+          ip_address?: string | null;
+        };
+        Update: {
+          id?: string;
+          qr_code_id?: string;
+          scanned_at?: string;
+          user_agent?: string | null;
+          referrer?: string | null;
+          ip_address?: string | null;
         };
         Relationships: [];
       };
