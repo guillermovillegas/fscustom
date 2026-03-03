@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback } from "react";
 import { format } from "date-fns";
-import { Phone, CalendarX2, Plus } from "lucide-react";
+import { Phone, CalendarX2, Plus, Check, Mail, Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -31,6 +31,7 @@ import type {
   ProjectType,
 } from "@/lib/types/database";
 import { quickCreateAppointment } from "@/lib/actions";
+import { updateAppointment, sendFollowUpEmail } from "@/lib/actions/update-appointment";
 import { AppointmentDetailDialog } from "./appointment-detail-dialog";
 
 // ---------------------------------------------------------------------------
@@ -166,6 +167,8 @@ export function DayAppointments({
     [appointments]
   );
 
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
+
   const handleCardClick = useCallback((appt: Appointment) => {
     setSelectedAppointment(appt);
     setDialogOpen(true);
@@ -179,29 +182,56 @@ export function DayAppointments({
     [onAppointmentUpdate]
   );
 
+  const handleConfirm = useCallback(
+    async (appt: Appointment) => {
+      setActionLoading(`confirm-${appt.id}`);
+      const result = await updateAppointment({ id: appt.id, status: "confirmed" });
+      if (result.success) {
+        onAppointmentUpdate({ ...appt, status: "confirmed" });
+      }
+      setActionLoading(null);
+    },
+    [onAppointmentUpdate]
+  );
+
+  const handleEmail = useCallback(
+    async (appt: Appointment) => {
+      setActionLoading(`email-${appt.id}`);
+      await sendFollowUpEmail(appt.id);
+      setActionLoading(null);
+    },
+    []
+  );
+
   return (
     <div className="space-y-4">
       {/* Day Header */}
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">
-          {format(date, "EEEE, MMMM d, yyyy")}
-        </h3>
-        <div className="flex items-center gap-2">
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => {
-              resetQuickBook();
-              setQuickBookOpen(true);
-            }}
-          >
-            <Plus className="mr-1 size-4" />
-            Quick Book
-          </Button>
-          <Badge variant="secondary">
-            {sortedAppointments.length}{" "}
-            {sortedAppointments.length === 1 ? "appointment" : "appointments"}
-          </Badge>
+      <div className="space-y-2">
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0">
+            <h3 className="text-base font-semibold leading-tight">
+              {format(date, "EEE, MMM d")}
+            </h3>
+            <p className="text-xs text-muted-foreground">
+              {format(date, "yyyy")}
+            </p>
+          </div>
+          <div className="flex shrink-0 items-center gap-1.5">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => {
+                resetQuickBook();
+                setQuickBookOpen(true);
+              }}
+            >
+              <Plus className="mr-1 size-3.5" />
+              Quick Book
+            </Button>
+            <Badge variant="secondary" className="text-xs">
+              {sortedAppointments.length}
+            </Badge>
+          </div>
         </div>
       </div>
 
@@ -221,67 +251,101 @@ export function DayAppointments({
       ) : (
         <div className="space-y-2">
           {sortedAppointments.map((appt) => (
-            <button
+            <div
               key={appt.id}
-              type="button"
-              onClick={() => handleCardClick(appt)}
-              className={cn(
-                "group w-full rounded-lg border bg-card p-4 text-left shadow-sm",
-                "transition-all hover:shadow-md hover:ring-1 hover:ring-ring/20",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              )}
+              className="rounded-lg border bg-card shadow-sm"
             >
-              <div className="flex items-start justify-between gap-3">
-                {/* Left: Time + Details */}
-                <div className="flex items-start gap-3">
-                  {/* Status indicator dot */}
-                  <div className="mt-1.5 flex flex-col items-center gap-1">
+              {/* Clickable card area */}
+              <button
+                type="button"
+                onClick={() => handleCardClick(appt)}
+                className={cn(
+                  "group w-full p-3 text-left",
+                  "transition-colors hover:bg-accent/50",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring",
+                  "rounded-t-lg"
+                )}
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-start gap-2.5 min-w-0">
                     <div
                       className={cn(
-                        "size-2.5 rounded-full",
+                        "mt-1.5 size-2 shrink-0 rounded-full",
                         STATUS_DOT_COLORS[appt.status]
                       )}
                     />
+                    <div className="min-w-0 space-y-0.5">
+                      <p className="text-xs font-medium tabular-nums text-muted-foreground">
+                        {formatTime(appt.appointment_time)}
+                      </p>
+                      <p className="truncate font-semibold text-sm leading-tight">
+                        {appt.customer_name}
+                      </p>
+                      <a
+                        href={`tel:${appt.customer_phone}`}
+                        onClick={(e) => e.stopPropagation()}
+                        className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
+                      >
+                        <Phone className="size-3" />
+                        {appt.customer_phone}
+                      </a>
+                    </div>
                   </div>
-
-                  <div className="space-y-1">
-                    {/* Time */}
-                    <p className="text-sm font-medium tabular-nums text-muted-foreground">
-                      {formatTime(appt.appointment_time)}
-                    </p>
-
-                    {/* Customer Name */}
-                    <p className="font-semibold leading-tight">
-                      {appt.customer_name}
-                    </p>
-
-                    {/* Phone (click to call) */}
-                    <a
-                      href={`tel:${appt.customer_phone}`}
-                      onClick={(e) => e.stopPropagation()}
-                      className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+                  <div className="flex shrink-0 flex-col items-end gap-1">
+                    <Badge
+                      className={cn("border text-[10px] px-1.5 py-0", STATUS_STYLES[appt.status])}
+                      variant="outline"
                     >
-                      <Phone className="size-3" />
-                      {appt.customer_phone}
-                    </a>
+                      {appt.status.charAt(0).toUpperCase() + appt.status.slice(1)}
+                    </Badge>
+                    <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
+                      {PROJECT_LABELS[appt.project_type]}
+                    </Badge>
                   </div>
                 </div>
+              </button>
 
-                {/* Right: Badges */}
-                <div className="flex shrink-0 flex-col items-end gap-1.5">
-                  <Badge
-                    className={cn("border text-xs", STATUS_STYLES[appt.status])}
-                    variant="outline"
+              {/* Quick actions bar */}
+              <div className="flex items-center gap-1 border-t px-3 py-1.5">
+                {appt.status === "pending" && (
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="h-7 gap-1 text-xs text-green-700 hover:text-green-800 hover:bg-green-50"
+                    disabled={actionLoading === `confirm-${appt.id}`}
+                    onClick={() => handleConfirm(appt)}
                   >
-                    {appt.status.charAt(0).toUpperCase() +
-                      appt.status.slice(1)}
-                  </Badge>
-                  <Badge variant="secondary" className="text-xs">
-                    {PROJECT_LABELS[appt.project_type]}
-                  </Badge>
-                </div>
+                    {actionLoading === `confirm-${appt.id}` ? (
+                      <Loader2 className="size-3 animate-spin" />
+                    ) : (
+                      <Check className="size-3" />
+                    )}
+                    Confirm
+                  </Button>
+                )}
+                {appt.customer_email && (
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="h-7 gap-1 text-xs text-blue-700 hover:text-blue-800 hover:bg-blue-50"
+                    disabled={actionLoading === `email-${appt.id}`}
+                    onClick={() => handleEmail(appt)}
+                  >
+                    {actionLoading === `email-${appt.id}` ? (
+                      <Loader2 className="size-3 animate-spin" />
+                    ) : (
+                      <Mail className="size-3" />
+                    )}
+                    Email
+                  </Button>
+                )}
+                {appt.status !== "pending" && !appt.customer_email && (
+                  <span className="text-[10px] text-muted-foreground/60 py-0.5">
+                    No quick actions
+                  </span>
+                )}
               </div>
-            </button>
+            </div>
           ))}
         </div>
       )}
