@@ -454,11 +454,12 @@ export function LandingPage() {
 
           {/* Masonry-style grid */}
           <div className="columns-2 gap-2 sm:columns-3 sm:gap-3 lg:columns-4">
-            {filteredGallery.map((item, i) => (
+            {filteredGallery.map((item) => (
               <MotionDiv
                 key={item.src}
-                variants={fadeUp}
-                custom={i * 0.03}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
                 className="mb-2 sm:mb-3 break-inside-avoid"
               >
                 <button
