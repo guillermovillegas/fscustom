@@ -12,20 +12,20 @@ export const metadata = {
 
 const SHOWCASE_IMAGES = [
   {
-    src: "/gallery/kitchen-island-marble.webp",
-    alt: "Kitchen remodel with marble island",
+    src: "/gallery/kitchen-backsplash-bar.webp",
+    alt: "Custom tile backsplash wet bar",
   },
   {
-    src: "/gallery/bathroom-dark-tub-1.webp",
-    alt: "Luxury dark stone bathroom",
+    src: "/gallery/shower-terrazzo-dual.webp",
+    alt: "Terrazzo dual rain shower",
   },
   {
-    src: "/gallery/shower-stone-walk-in-1.webp",
-    alt: "Natural stone walk-in shower",
+    src: "/gallery/bathroom-terrazzo-tub-1.webp",
+    alt: "Terrazzo stone freestanding tub",
   },
   {
-    src: "/gallery/flooring-living-room-1.webp",
-    alt: "LVP flooring living room",
+    src: "/gallery/flooring-fireplace-stone.webp",
+    alt: "Stone fireplace with hardwood floors",
   },
 ];
 
