@@ -91,14 +91,12 @@ const PROPERTY_OPTIONS: {
 ];
 
 const TIME_SLOTS = [
-  "9:00 AM",
-  "10:00 AM",
-  "11:00 AM",
-  "12:00 PM",
-  "1:00 PM",
-  "2:00 PM",
-  "3:00 PM",
-  "4:00 PM",
+  { label: "Early Morning", range: "8:00 – 10:00 AM", value: "8:00 AM" },
+  { label: "Late Morning", range: "10:00 AM – 12:00 PM", value: "10:00 AM" },
+  { label: "Early Afternoon", range: "12:00 – 2:00 PM", value: "12:00 PM" },
+  { label: "Mid Afternoon", range: "2:00 – 4:00 PM", value: "2:00 PM" },
+  { label: "Late Afternoon", range: "4:00 – 5:30 PM", value: "4:00 PM" },
+  { label: "Evening", range: "5:30 – 7:00 PM", value: "5:30 PM" },
 ] as const;
 
 function isDateDisabled(date: Date): boolean {
@@ -368,22 +366,31 @@ export function BookingWizard() {
                 }
               />
 
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                {TIME_SLOTS.map((time) => {
-                  const isSelected = selectedTime === time;
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {TIME_SLOTS.map((slot) => {
+                  const isSelected = selectedTime === slot.value;
                   return (
-                    <Button
-                      key={time}
+                    <button
+                      key={slot.value}
                       type="button"
-                      variant={isSelected ? "default" : "outline"}
+                      onClick={() => handleTimeSelect(slot.value)}
                       className={cn(
-                        "h-14 text-base font-medium transition-all duration-200",
-                        isSelected && "ring-2 ring-primary/30"
+                        "flex flex-col items-center gap-1 rounded-xl border-2 p-4 text-center transition-all duration-200",
+                        "hover:border-primary/50 hover:shadow-md",
+                        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                        "active:scale-[0.98]",
+                        isSelected
+                          ? "border-primary bg-primary/5 shadow-md"
+                          : "border-muted bg-card"
                       )}
-                      onClick={() => handleTimeSelect(time)}
                     >
-                      {time}
-                    </Button>
+                      <span className="text-sm font-semibold">
+                        {slot.label}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        {slot.range}
+                      </span>
+                    </button>
                   );
                 })}
               </div>

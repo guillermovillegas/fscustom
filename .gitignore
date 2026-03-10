@@ -40,3 +40,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 /logo.jpg
+
+# original unoptimized media (use /public/gallery/ for web-ready assets)
+public/images/
