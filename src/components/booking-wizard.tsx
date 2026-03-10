@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format, isBefore, startOfDay, isSunday } from "date-fns";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import {
   UtensilsCrossed,
   Bath,
@@ -49,24 +50,28 @@ const PROJECT_OPTIONS: {
   label: string;
   icon: typeof UtensilsCrossed;
   description: string;
+  image: string;
 }[] = [
   {
     value: "kitchen",
     label: "Kitchen",
     icon: UtensilsCrossed,
     description: "Countertops, cabinets, backsplash & more",
+    image: "/gallery/kitchen-island-marble.webp",
   },
   {
     value: "bathroom",
     label: "Bathroom",
     icon: Bath,
     description: "Tile, showers, vanities & tub surrounds",
+    image: "/gallery/bathroom-dark-tub-1.webp",
   },
   {
     value: "flooring",
     label: "Flooring",
     icon: Layers,
     description: "Hardwood, tile, LVP & custom flooring",
+    image: "/gallery/flooring-living-room-1.webp",
   },
 ];
 
@@ -237,30 +242,54 @@ export function BookingWizard() {
                       type="button"
                       onClick={() => handleProjectSelect(option.value)}
                       className={cn(
-                        "group flex flex-col items-center gap-3 rounded-xl border-2 p-6 text-center transition-all duration-200",
-                        "hover:border-primary/50 hover:shadow-md",
+                        "group relative overflow-hidden rounded-xl border-2 text-left transition-all duration-200",
+                        "hover:border-primary/50 hover:shadow-lg",
                         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                         "active:scale-[0.98]",
                         isSelected
-                          ? "border-primary bg-primary/5 shadow-md"
-                          : "border-muted bg-card"
+                          ? "border-primary shadow-lg ring-2 ring-primary/20"
+                          : "border-muted"
                       )}
                     >
-                      <div
-                        className={cn(
-                          "flex size-14 items-center justify-center rounded-full transition-colors duration-200",
+                      {/* Background image */}
+                      <div className="relative h-28 sm:h-32">
+                        <Image
+                          src={option.image}
+                          alt={option.label}
+                          fill
+                          sizes="(max-width: 640px) 100vw, 33vw"
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                        <div className={cn(
+                          "absolute inset-0 transition-colors duration-200",
                           isSelected
-                            ? "bg-primary text-primary-foreground"
-                            : "bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary"
-                        )}
-                      >
-                        <Icon className="size-7" />
+                            ? "bg-primary/30"
+                            : "bg-black/10 group-hover:bg-black/5"
+                        )} />
                       </div>
-                      <div>
-                        <p className="text-base font-semibold">{option.label}</p>
-                        <p className="mt-1 text-xs text-muted-foreground">
-                          {option.description}
-                        </p>
+                      {/* Text content on solid background */}
+                      <div className={cn(
+                        "relative p-4 transition-colors duration-200",
+                        isSelected ? "bg-primary/5" : "bg-card"
+                      )}>
+                        <div className="flex items-center gap-2.5">
+                          <div
+                            className={cn(
+                              "flex size-9 shrink-0 items-center justify-center rounded-full transition-colors duration-200",
+                              isSelected
+                                ? "bg-primary text-primary-foreground"
+                                : "bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary"
+                            )}
+                          >
+                            <Icon className="size-4.5" />
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-sm font-semibold leading-tight">{option.label}</p>
+                            <p className="mt-0.5 text-xs text-muted-foreground leading-snug">
+                              {option.description}
+                            </p>
+                          </div>
+                        </div>
                       </div>
                     </button>
                   );
