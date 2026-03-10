@@ -34,7 +34,7 @@ export default function SchedulePage() {
     <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-10">
         {/* Header */}
-        <header className="mb-8">
+        <header className="mb-6">
           <Button variant="ghost" size="sm" asChild className="mb-4 gap-2">
             <Link href="/">
               <ArrowLeft className="size-4" />
@@ -58,13 +58,34 @@ export default function SchedulePage() {
           </p>
         </header>
 
+        {/* Mobile: horizontal scroll strip */}
+        <div className="mb-6 -mx-4 px-4 lg:hidden">
+          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+            {SHOWCASE_IMAGES.map((img) => (
+              <div
+                key={img.src}
+                className="relative h-24 w-32 shrink-0 overflow-hidden rounded-lg"
+              >
+                <Image
+                  src={img.src}
+                  alt={img.alt}
+                  fill
+                  sizes="128px"
+                  loading="lazy"
+                  className="object-cover"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
         <div className="flex flex-col gap-10 lg:flex-row lg:gap-12">
           {/* Wizard */}
           <div className="flex-1 lg:max-w-2xl">
             <BookingWizard />
           </div>
 
-          {/* Showcase sidebar - hidden on small screens */}
+          {/* Desktop: sidebar */}
           <aside className="hidden lg:block w-64 shrink-0">
             <p className="text-xs font-medium tracking-[0.15em] uppercase text-muted-foreground mb-4">
               Recent Work
@@ -80,6 +101,7 @@ export default function SchedulePage() {
                     alt={img.alt}
                     fill
                     sizes="256px"
+                    loading="lazy"
                     className="object-cover"
                   />
                 </div>
