@@ -100,7 +100,7 @@ interface GalleryItem {
 }
 
 const GALLERY_ITEMS: GalleryItem[] = [
-  // Kitchen — best 2
+  // Kitchen
   {
     src: "/gallery/kitchen-island-marble.webp",
     alt: "Modern kitchen island with marble countertop and pendant lights",
@@ -112,7 +112,12 @@ const GALLERY_ITEMS: GalleryItem[] = [
     alt: "Kitchen range with zellige tile backsplash and white cabinets",
     category: "kitchen",
   },
-  // Bathroom — best 3
+  {
+    src: "/gallery/kitchen-backsplash-bar.webp",
+    alt: "Custom tile backsplash wet bar with floating shelves",
+    category: "kitchen",
+  },
+  // Bathroom
   {
     src: "/gallery/bathroom-dark-tub-1.webp",
     alt: "Luxury dark stone bathroom with freestanding soaking tub",
@@ -129,7 +134,33 @@ const GALLERY_ITEMS: GalleryItem[] = [
     alt: "Freestanding round tub with dark and white tile surround",
     category: "bathroom",
   },
-  // Shower — best 3
+  {
+    src: "/gallery/bathroom-dark-glass.webp",
+    alt: "Modern bathroom with glass shower enclosure",
+    category: "bathroom",
+  },
+  {
+    src: "/gallery/bathroom-dark-tub-detail.webp",
+    alt: "Soaking tub detail with brass freestanding faucet",
+    category: "bathroom",
+  },
+  {
+    src: "/gallery/bathroom-terrazzo-tub-2.webp",
+    alt: "Terrazzo stone tub surround with freestanding faucet",
+    category: "bathroom",
+  },
+  {
+    src: "/gallery/bathroom-dark-shower.webp",
+    alt: "Dark tile shower with rain head and hand shower",
+    category: "bathroom",
+  },
+  {
+    src: "/gallery/bathroom-dark-tub-3.webp",
+    alt: "Dark stone tub alcove with vertical windows",
+    category: "bathroom",
+    span: "tall",
+  },
+  // Shower
   {
     src: "/gallery/shower-stone-walk-in-1.webp",
     alt: "Natural stone walk-in shower with pebble floor",
@@ -146,7 +177,42 @@ const GALLERY_ITEMS: GalleryItem[] = [
     alt: "Marble shower with built-in bench and mosaic floor",
     category: "shower",
   },
-  // Flooring — best 2
+  {
+    src: "/gallery/shower-tile-niche.webp",
+    alt: "Grey tile shower niche with marble ledge",
+    category: "shower",
+  },
+  {
+    src: "/gallery/shower-stone-niche.webp",
+    alt: "Natural stone shower with built-in niche detail",
+    category: "shower",
+  },
+  {
+    src: "/gallery/shower-stone-entrance.webp",
+    alt: "Walk-in stone shower with half wall and glass",
+    category: "shower",
+  },
+  {
+    src: "/gallery/shower-stone-pebble.webp",
+    alt: "Stone shower with pebble floor and built-in shelves",
+    category: "shower",
+  },
+  {
+    src: "/gallery/shower-marble-niche.webp",
+    alt: "Marble shower wall with recessed shelf niche",
+    category: "shower",
+  },
+  {
+    src: "/gallery/shower-marble-rain.webp",
+    alt: "Marble and grey tile shower with rain head",
+    category: "shower",
+  },
+  {
+    src: "/gallery/shower-terrazzo-rain.webp",
+    alt: "Terrazzo shower with overhead rain head",
+    category: "shower",
+  },
+  // Flooring
   {
     src: "/gallery/flooring-living-room-1.webp",
     alt: "Living room with LVP flooring and stone fireplace surround",
@@ -157,6 +223,11 @@ const GALLERY_ITEMS: GalleryItem[] = [
     alt: "Custom stone fireplace with hardwood flooring",
     category: "flooring",
     span: "wide",
+  },
+  {
+    src: "/gallery/flooring-living-room-2.webp",
+    alt: "Modern living room with hardwood floors and fireplace",
+    category: "flooring",
   },
 ];
 
@@ -476,6 +547,8 @@ export function LandingPage() {
                     width={600}
                     height={item.span === "wide" ? 400 : item.span === "tall" ? 900 : 750}
                     sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                    loading="lazy"
+                    placeholder="empty"
                     className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/20" />
